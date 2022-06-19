@@ -1,2 +1,2 @@
-# m151-scuffed-rating
-Project files for M151
+# M151
+About Unterlagen für das Modul M151

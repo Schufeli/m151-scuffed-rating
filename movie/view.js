@@ -46,7 +46,7 @@ function renderRatingStars(stars, movieId) {
           str += "☆";
       }
       str += "</a>";
-    } else {
+    } else { // Low budget implementation of user can only rate movie once
       str += `<a>`;
       if (stars >= i) {
           str += "★";

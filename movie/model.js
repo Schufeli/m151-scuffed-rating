@@ -2,16 +2,26 @@ import mysql from 'mysql2/promise';
 
 const connection = await mysql.createConnection({
   host: '127.0.0.1',
-  //port: 3307,
   user: 'root',
   database: 'movie-db',
 });
 
 await connection.connect();
 
-export async function getAll() {
-  const query = 'SELECT * FROM Movies';
-  const [data] = await connection.query(query);
+export async function getAll(userId) {
+  const query = `
+  SELECT
+    movies.id,
+    movies.title,
+    movies.year,
+    IFNULL(ROUND(AVG(ratings.rating),1), 0) AS rating,
+    IFNULL((SELECT ratings.rating FROM ratings WHERE ratings.movie = movies.id AND ratings.user = ?), 0) AS userRating
+  FROM
+    movies
+  LEFT JOIN ratings ON ratings.movie = movies.id
+  GROUP BY
+    movies.id`;
+  const [data] = await connection.query(query, userId);
   return data;
 }
 
@@ -45,4 +55,10 @@ export function save(movie) {
   } else {
     return update(movie);
   }
+}
+
+export async function rateMovie(userId, movieId, rating) {
+  const query = 'INSERT INTO Ratings (user, movie, rating) VALUES (?, ?, ?)'
+  await connection.query(query, [userId, movieId, rating]);
+  // User can only rate a movie once has been realised with a database trigger for efficency
 }

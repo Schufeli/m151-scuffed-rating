@@ -15,3 +15,7 @@ td {
 tbody tr:hover {
   background-color: lightgrey;
 }
+
+.checked {
+  color: orange;
+}

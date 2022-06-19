@@ -18,6 +18,10 @@ export function render(movies) {
         <tr>
           <td>${movie.id}</td>
           <td>${movie.title}</td>
+          <td>
+            ${renderRatingStars(movie.userRating, movie.id)}
+          </td>
+          <td>${movie.rating}</td>
           <td><a href="/movie/delete/${movie.id}">löschen</a></td>
           <td><a href="/movie/form/${movie.id}">bearbeiten</a></td> 
         </tr>`,
@@ -29,4 +33,29 @@ export function render(movies) {
 </body>
 </html>
   `;
+}
+
+function renderRatingStars(stars, movieId) {
+  let str = "";
+  for (let i = 1; i <= 5; i++) {
+    if (stars <= 0) {
+      str += `<a href="/movie/rating/${movieId}/${i}">`;
+      if (stars >= i) {
+          str += "★";
+      } else {
+          str += "☆";
+      }
+      str += "</a>";
+    } else {
+      str += `<a>`;
+      if (stars >= i) {
+          str += "★";
+      } else {
+          str += "☆";
+      }
+      str += "</a>";
+    }
+     
+  }
+  return str;
 }
